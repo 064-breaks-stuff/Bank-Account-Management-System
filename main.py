@@ -33,8 +33,8 @@ yes = ["yes", "Yes", "YES", "y", "Y", "yeah", "Yeah", "yep", "Yep", "yup", "Yup"
 no = ["no", "No", "NO", "n", "N", "nah", "Nah", "nope", "Nope", "nop", "nay", "Nay", "negative", "Negative", "not", "Not", "never", "Never", "nuh-uh", "no way", "No way", "not at all", "Not at all", "decline", "Decline", "pass", "Pass", "nah fam", "wrong", "Wrong", "false", "False", "disagree", "Disagree", "👎", "❌", "🚫", "否", "non", "nein", "нет"]
 
 if affirm in no:
-    name:str = input("Under what name would you like to open your new account?" )
-    bank:str = input("With which bank would you like to open your new account?" )
+    name:str = input("Under what name would you like to open your new account? ")
+    bank:str = input("With which bank would you like to open your new account? ")
     account = BankAccount(name, bank)
 
 elif affirm in yes:
@@ -49,7 +49,7 @@ account = BankAccount(name, bank)
 
 # Create a pandas dataframe to display withdraw and deposit statements along with balance remaining
 
-
+bank_database = pd.DataFrame(columns = ["Status", "Amount", "Source/Reason", "Balance"])
  
 # Simulate user actions
 
