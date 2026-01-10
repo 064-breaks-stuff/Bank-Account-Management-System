@@ -1,6 +1,7 @@
 # Bank Management System
-
+import os
 import pandas as pd
+import csv
 class BankAccount:
     def __init__(self, account_holder: str, bank_name: str, balance: float=0):
         self.account_holder = account_holder
@@ -12,11 +13,11 @@ class BankAccount:
         print(f"\nDeposited: ${amount}, Source: {source}, Current Balance: ${self.balance}")
  
     def withdraw(self, amount: float, reason: str):
-        if self.balance >= amount:
-            self.balance -= amount
-            print(f"\nWithdrawn: ${amount}, Reason: {reason}, Current Balance: ${self.balance}")
-        else:
-            print("\nInsufficient balance")
+        '''if self.balance >= amount:
+            self.balance -= amount'''
+        print(f"\nWithdrawn: ${amount}, Reason: {reason}, Current Balance: ${self.balance}")
+        #else:
+        #   print("\nInsufficient balance")
  
     def show_balance(self):
         print(f"\nAccount Holder: {self.account_holder}")
@@ -52,15 +53,13 @@ account = BankAccount(name, bank)
 action:str = input("\nWhat would you like to do?: \n(1) Deposit money\n(2) Withdraw money\n(3) Check Balance\n")
 
 list1 = []
-bank_database = pd.DataFrame(columns = ["Status", "Amount", "Source/Reason"])
-baselist = pd.DataFrame(columns = bank_database.columns)
 
 match action.lower():
 
     case "deposit" | "deposit money" | "1" | "(1)": 
         amount, source = input("\nPlease enter the amount you would like to deposit, followed by the source of the money to be deposited, separated by commas.\n").split(", ")
         list1.append("Deposit")
-        amount = int(amount)
+        amount = float(amount)
         list1.append(amount)
         list1.append(source)
         account.deposit(amount, source)
@@ -68,16 +67,34 @@ match action.lower():
     case "withdraw" | "withdraw money" | "2" | "(2)": 
         amount, reason = input("\nPlease enter the amount you would like to withdraw, followed by the reason for withdrawal, separated by commas.\n").split(", ")
         list1.append("Withdrawal")
-        amount = int(amount)
+        amount = float(amount)
+        list1.append(amount)
         list1.append(reason)
         account.withdraw(amount, reason)
-        list1.append(amount)
-
+        
     case "show balance" | "balance" | "3" | "(3)": account.show_balance()
 
     case _: print("\nPlease choose one of the listed actions.")
 
-baselist.loc[len(baselist)+1] = list1
-bank_database = pd.concat([bank_database, baselist], ignore_index=False)
+if os.path.exists(f'{name}.csv') == True:
+    bank_database = pd.read_csv(f'{name}.csv', index_col=0)
+    bank_database.loc[len(bank_database)+1] = list1
 
-print(bank_database)
+    if bank_database.index[0] == 0:
+        bank_database.index +=1
+
+    bank_database.to_csv(f'{name}.csv', index=True, index_label="Transaction ID")
+
+else:
+    with open(f'{name}.csv', 'w') as f:
+        header = ["Status","Amount","Source/Reason"]
+        writer = csv.writer(f)
+        writer.writerow(header)
+
+    bank_database = pd.read_csv(f'{name}.csv')
+    bank_database.loc[len(bank_database)+1] = list1
+
+    if bank_database.index[0] == 0:
+        bank_database.index +=1
+
+    bank_database.to_csv(f'{name}.csv', index=True, index_label="Transaction ID")
