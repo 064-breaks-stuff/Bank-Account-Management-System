@@ -9,17 +9,17 @@ class BankAccount:
  
     def deposit(self, amount: float, source: str):
         self.balance += amount
-        print(f"Deposited: ${amount}, Source: {source}, Current Balance: ${self.balance}")
+        print(f"\nDeposited: ${amount}, Source: {source}, Current Balance: ${self.balance}")
  
     def withdraw(self, amount: float, reason: str):
         if self.balance >= amount:
             self.balance -= amount
-            print(f"Withdrawn: ${amount}, Reason: {reason}, Current Balance: ${self.balance}")
+            print(f"\nWithdrawn: ${amount}, Reason: {reason}, Current Balance: ${self.balance}")
         else:
-            print("Insufficient balance")
+            print("\nInsufficient balance")
  
     def show_balance(self):
-        print(f"Account Holder: {self.account_holder}")
+        print(f"\nAccount Holder: {self.account_holder}")
         print(f"Name of bank: {self.bank_name}")
         print(f"Balance: ${self.balance}")
  
@@ -44,20 +44,21 @@ elif affirm in yes:
 # Create a bank account
 
 name:str = input("Under what name would you like to open your new account? ")
-bank:str = input("With which bank would you like to open your new account? ")
+bank:str = input("\nWith which bank would you like to open your new account? ")
 account = BankAccount(name, bank)
  
 # Simulate user actions
 
-action:str = input("What would you like to do?: \n(1) Deposit money\n(2) Withdraw money\n(3) Check Balance\n\n")
+action:str = input("\nWhat would you like to do?: \n(1) Deposit money\n(2) Withdraw money\n(3) Check Balance\n")
 
 list1 = []
-baselist = []
+bank_database = pd.DataFrame(columns = ["Status", "Amount", "Source/Reason"])
+baselist = pd.DataFrame(columns = bank_database.columns)
 
 match action.lower():
 
     case "deposit" | "deposit money" | "1" | "(1)": 
-        amount, source = input("Please enter the amount you would like to deposit, followed by the source of the money to be deposited, separated by commas.\n").split(", ")
+        amount, source = input("\nPlease enter the amount you would like to deposit, followed by the source of the money to be deposited, separated by commas.\n").split(", ")
         list1.append("Deposit")
         amount = int(amount)
         list1.append(amount)
@@ -65,7 +66,7 @@ match action.lower():
         account.deposit(amount, source)
 
     case "withdraw" | "withdraw money" | "2" | "(2)": 
-        amount, reason = input("Please enter the amount you would like to withdraw, followed by the reason for withdrawal, separated by commas.\n").split(", ")
+        amount, reason = input("\nPlease enter the amount you would like to withdraw, followed by the reason for withdrawal, separated by commas.\n").split(", ")
         list1.append("Withdrawal")
         amount = int(amount)
         list1.append(reason)
@@ -74,9 +75,9 @@ match action.lower():
 
     case "show balance" | "balance" | "3" | "(3)": account.show_balance()
 
-    case _: print("Please choose one of the listed actions.")
+    case _: print("\nPlease choose one of the listed actions.")
 
-baselist.append(list1)
-baselist = pd.DataFrame(baselist, index = [i for i in range(1, len(baselist)+1)], columns = ["Status", "Amount", "Source/Reason"])
+baselist.loc[len(baselist)+1] = list1
+bank_database = pd.concat([bank_database, baselist], ignore_index=False)
 
-print(baselist)
+print(bank_database)
