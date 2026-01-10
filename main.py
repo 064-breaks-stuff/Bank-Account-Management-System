@@ -61,27 +61,16 @@ match action.lower():
 
     case "deposit" | "deposit money" | "1" | "(1)": 
         amount, source = input("Please enter the amount you would like to deposit, followed by the source of the money to be deposited, separated by commas.\n").split(", ")
-        list1.append("Deposit")
         amount = int(amount)
-        list1.append(amount)
-        list1.append(source)
         account.deposit(amount, source)
-        list1.append(amount)
 
     case "withdraw" | "withdraw money" | "2" | "(2)": 
         amount, reason = input("Please enter the amount you would like to withdraw, followed by the reason for withdrawal, separated by commas.\n").split(", ")
         list1.append("Withdrawal")
         amount = int(amount)
-        list1.append(amount)
-        list1.append(reason)
         account.withdraw(amount, reason)
-        list1.append(amount)
 
     case "show balance" | "balance" | "3" | "(3)": account.show_balance()
 
     case _: print("Please choose one of the listed actions.")
 
-list1 = pd.DataFrame(list1, columns=bank_database.columns)
-
-bank_database = pd.concat([bank_database, list1], ignore_index = True)
-print(bank_database)
